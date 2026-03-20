@@ -1,0 +1,64 @@
+{
+  "name": "bettermd",
+  "version": "1.0.0",
+  "description": "A simple markdown viewer for macOS. Like Preview, but for markdown.",
+  "main": "main.js",
+  "scripts": {
+    "build": "esbuild renderer.js --bundle --outfile=renderer.bundle.js --platform=browser --format=iife --minify",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder --mac"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "build": {
+    "appId": "com.bettermd.app",
+    "productName": "BetterMD",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "styles.css",
+      "renderer.bundle.js",
+      "assets/icon.png"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64"]
+        }
+      ],
+      "icon": "assets/icon.icns",
+      "artifactName": "BetterMD-${version}-arm64.dmg"
+    },
+    "fileAssociations": [
+      {
+        "ext": "md",
+        "name": "Markdown Document",
+        "role": "Viewer",
+        "icon": "assets/icon.icns"
+      },
+      {
+        "ext": "markdown",
+        "name": "Markdown Document",
+        "role": "Viewer",
+        "icon": "assets/icon.icns"
+      }
+    ]
+  },
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "marked": "^17.0.5"
+  },
+  "devDependencies": {
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "esbuild": "^0.27.4",
+    "sharp": "^0.34.5"
+  }
+}

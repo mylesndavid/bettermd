@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BetterMD</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Drag region for native title bar -->
+  <div id="titlebar">
+    <div id="title-text"></div>
+    <div id="toolbar">
+      <button id="toggle-btn" title="Toggle Raw / Rendered (⌘⇧R)">
+        <span id="toggle-icon">◉</span>
+        <span id="toggle-label">Rendered</span>
+      </button>
+      <button id="pdf-btn" title="Save as PDF (⌘⇧E)">
+        <span>⬡</span>
+        <span>PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="empty-state">
+    <div class="empty-icon">◇</div>
+    <h2>BetterMD</h2>
+    <p>Open a Markdown file to get started</p>
+    <p class="shortcut">⌘O to open&ensp;·&ensp;or drag a file here</p>
+  </div>
+
+  <!-- Content views -->
+  <div id="content" class="hidden">
+    <div id="rendered-view" class="view active"></div>
+    <div id="raw-view" class="view">
+      <pre><code id="raw-code"></code></pre>
+    </div>
+  </div>
+
+  <script src="renderer.bundle.js"></script>
+</body>
+</html>
