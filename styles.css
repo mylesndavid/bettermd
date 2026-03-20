@@ -67,6 +67,37 @@ html, body {
   -webkit-backdrop-filter: blur(20px);
 }
 
+#back-btn {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 10px 4px 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: background 0.1s ease;
+  flex-shrink: 0;
+}
+
+#back-btn span:first-child {
+  font-size: 18px;
+  line-height: 1;
+}
+
+#back-btn:hover {
+  background: var(--surface);
+}
+
+#back-btn.hidden {
+  display: none;
+}
+
 #title-text {
   font-size: 13px;
   font-weight: 600;
@@ -142,6 +173,69 @@ html, body {
   margin-top: 12px;
   font-size: 12px;
   opacity: 0.6;
+}
+
+/* Recents list */
+#recents {
+  margin-top: 32px;
+  width: 100%;
+  max-width: 400px;
+}
+
+#recents.hidden {
+  display: none;
+}
+
+#recents h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fg-secondary);
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+#recents-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#recents-list li {
+  margin: 0;
+}
+
+#recents-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--fg);
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+#recents-list a:hover {
+  background: var(--surface);
+}
+
+#recents-list .recent-name {
+  font-size: 13px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+#recents-list .recent-dir {
+  font-size: 11px;
+  color: var(--fg-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
 }
 
 /* Content area */

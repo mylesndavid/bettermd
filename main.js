@@ -7,6 +7,37 @@ let currentFilePath = null;
 let fileWatcher = null;
 let ignoreNextWatch = false;
 
+// Recents
+const MAX_RECENTS = 10;
+
+function getRecentsPath() {
+  return path.join(app.getPath('userData'), 'recents.json');
+}
+
+function loadRecents() {
+  try {
+    return JSON.parse(fs.readFileSync(getRecentsPath(), 'utf-8'));
+  } catch {
+    return [];
+  }
+}
+
+function addToRecents(filePath) {
+  let recents = loadRecents();
+  recents = recents.filter((r) => r.path !== filePath);
+  recents.unshift({
+    path: filePath,
+    name: path.basename(filePath),
+    dir: path.dirname(filePath),
+    openedAt: Date.now(),
+  });
+  recents = recents.slice(0, MAX_RECENTS);
+  try {
+    fs.writeFileSync(getRecentsPath(), JSON.stringify(recents, null, 2));
+  } catch {}
+  return recents;
+}
+
 // Register custom protocol before app ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'local-file', privileges: { standard: false, secure: true, supportFetchAPI: true, stream: true } },
@@ -31,6 +62,8 @@ function createWindow(filePath) {
   win.loadFile('index.html');
 
   win.webContents.on('did-finish-load', () => {
+    // Always send recents on load
+    win.webContents.send('recents-updated', loadRecents());
     if (filePath) {
       loadFile(win, filePath);
     }
@@ -56,11 +89,15 @@ function createWindow(filePath) {
 
 function loadFile(win, filePath) {
   try {
+    filePath = path.resolve(filePath);
     const content = fs.readFileSync(filePath, 'utf-8');
     currentFilePath = filePath;
     win.setTitle(path.basename(filePath));
     win.setRepresentedFilename(filePath);
     win.webContents.send('file-loaded', { content, filePath, dirPath: path.dirname(filePath) });
+    const recents = addToRecents(filePath);
+    win.webContents.send('recents-updated', recents);
+    buildMenu();
   } catch (err) {
     dialog.showErrorBox('Error', `Could not open file:\n${err.message}`);
   }
@@ -77,6 +114,34 @@ async function openFile(win) {
   if (!canceled && filePaths.length > 0) {
     loadFile(win, filePaths[0]);
   }
+}
+
+function buildRecentsSubmenu() {
+  const recents = loadRecents();
+  if (recents.length === 0) {
+    return [{ label: 'No Recent Files', enabled: false }];
+  }
+  const items = recents.map((r) => ({
+    label: r.name,
+    sublabel: r.dir.replace(/^\/Users\/[^/]+/, '~'),
+    click: () => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        loadFile(mainWindow, r.path);
+      }
+    },
+  }));
+  items.push({ type: 'separator' });
+  items.push({
+    label: 'Clear Recents',
+    click: () => {
+      try { fs.writeFileSync(getRecentsPath(), '[]'); } catch {}
+      buildMenu(); // Rebuild menu to reflect cleared state
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('recents-updated', []);
+      }
+    },
+  });
+  return items;
 }
 
 function buildMenu() {
@@ -102,6 +167,10 @@ function buildMenu() {
           click: () => {
             if (mainWindow) openFile(mainWindow);
           },
+        },
+        {
+          label: 'Open Recent',
+          submenu: buildRecentsSubmenu(),
         },
         { type: 'separator' },
         {
@@ -223,7 +292,7 @@ ipcMain.handle('print-to-pdf', async (event) => {
       margins: { top: 0.4, bottom: 0.4, left: 0.4, right: 0.4 },
     });
     fs.writeFileSync(filePath, pdfData);
-    shell.showItemInFinder(filePath);
+    shell.showItemInFolder(filePath);
     return { success: true };
   } catch (err) {
     dialog.showErrorBox('PDF Error', err.message);
@@ -243,6 +312,14 @@ ipcMain.handle('save-to-file', async (event, { content }) => {
     ignoreNextWatch = false;
     dialog.showErrorBox('Save Error', err.message);
     return { success: false, error: err.message };
+  }
+});
+
+// Open a recent file
+ipcMain.on('open-recent', (event, filePath) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win && filePath) {
+    loadFile(win, filePath);
   }
 });
 

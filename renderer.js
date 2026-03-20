@@ -51,6 +51,9 @@ const editIcon = document.getElementById('edit-icon');
 const editLabel = document.getElementById('edit-label');
 const pdfBtn = document.getElementById('pdf-btn');
 const titleText = document.getElementById('title-text');
+const recentsContainer = document.getElementById('recents');
+const recentsList = document.getElementById('recents-list');
+const backBtn = document.getElementById('back-btn');
 
 // Configure marked with image resolver
 function configureMarked() {
@@ -120,8 +123,19 @@ function renderMarkdown(md) {
 
   emptyState.style.display = 'none';
   content.classList.remove('hidden');
+  backBtn.classList.remove('hidden');
 
   updateView();
+}
+
+function goBack() {
+  content.classList.add('hidden');
+  backBtn.classList.add('hidden');
+  emptyState.style.display = '';
+  titleText.textContent = '';
+  rawContent = '';
+  currentMode = 'rendered';
+  hasUnsavedChanges = false;
 }
 
 function updateView() {
@@ -199,7 +213,45 @@ async function saveFile() {
   }
 }
 
+// Recents
+function renderRecents(recents) {
+  if (!recents || recents.length === 0) {
+    recentsContainer.classList.add('hidden');
+    return;
+  }
+  recentsList.innerHTML = '';
+  for (const item of recents) {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.bettermd.openRecent(item.path);
+    });
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'recent-name';
+    nameSpan.textContent = item.name;
+
+    const dirSpan = document.createElement('span');
+    dirSpan.className = 'recent-dir';
+    // Show shortened path
+    const home = item.dir.replace(/^\/Users\/[^/]+/, '~');
+    dirSpan.textContent = home;
+
+    a.appendChild(nameSpan);
+    a.appendChild(dirSpan);
+    li.appendChild(a);
+    recentsList.appendChild(li);
+  }
+  recentsContainer.classList.remove('hidden');
+}
+
+window.bettermd.onRecentsUpdated((recents) => {
+  renderRecents(recents);
+});
+
 // Event listeners
+backBtn.addEventListener('click', goBack);
 toggleBtn.addEventListener('click', toggleView);
 editBtn.addEventListener('click', toggleEdit);
 

@@ -9,6 +9,10 @@
 <body>
   <!-- Drag region for native title bar -->
   <div id="titlebar">
+    <button id="back-btn" class="hidden" title="Back to recents">
+      <span>‹</span>
+      <span>Back</span>
+    </button>
     <div id="title-text"></div>
     <div id="toolbar">
       <button id="edit-btn" title="Edit (⌘E)">
@@ -32,6 +36,10 @@
     <h2>BetterMD</h2>
     <p>Open a Markdown file to get started</p>
     <p class="shortcut">⌘O to open&ensp;·&ensp;or drag a file here</p>
+    <div id="recents" class="hidden">
+      <h3>Recents</h3>
+      <ul id="recents-list"></ul>
+    </div>
   </div>
 
   <!-- Content views -->
