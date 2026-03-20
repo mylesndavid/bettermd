@@ -11,6 +11,10 @@
   <div id="titlebar">
     <div id="title-text"></div>
     <div id="toolbar">
+      <button id="edit-btn" title="Edit (⌘E)">
+        <span id="edit-icon">✎</span>
+        <span id="edit-label">Edit</span>
+      </button>
       <button id="toggle-btn" title="Toggle Raw / Rendered (⌘⇧R)">
         <span id="toggle-icon">◉</span>
         <span id="toggle-label">Rendered</span>
@@ -35,6 +39,9 @@
     <div id="rendered-view" class="view active"></div>
     <div id="raw-view" class="view">
       <pre><code id="raw-code"></code></pre>
+    </div>
+    <div id="edit-view" class="view">
+      <textarea id="editor" spellcheck="false"></textarea>
     </div>
   </div>
 

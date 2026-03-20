@@ -34,6 +34,12 @@ def fibonacci(n):
 | ⌘⇧R | Toggle raw/rendered |
 | ⌘⇧E | Save as PDF |
 
+## Image
+
+Here's the app icon rendered from a local file:
+
+![BetterMD Icon](assets/icon.png)
+
 ## Blockquote
 
 > Markdown is intended to be as easy-to-read and easy-to-write as is feasible.

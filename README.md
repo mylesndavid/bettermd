@@ -2,7 +2,7 @@
 
 A markdown viewer for macOS. Like Preview, but for `.md` files.
 
-Open any markdown file, view it beautifully rendered or as raw source, and export to PDF. That's it. The simplest md-to-pdf in the west.
+Open any markdown file, view it beautifully rendered or as raw source, edit it in place, and export to PDF. That's it. The simplest md-to-pdf in the west.
 
 ## Install
 
@@ -30,9 +30,13 @@ npm run dist
 
 ## Features
 
-**Rendered view** — clean, formatted markdown with syntax-highlighted code blocks
+**Rendered view** — clean, formatted markdown with syntax-highlighted code blocks and inline images
 
 **Raw view** — see the source, toggle with `Cmd+Shift+R`
+
+**Edit mode** — click Edit or `Cmd+E` to edit the markdown directly, `Cmd+S` to save
+
+**Images** — local and remote images render inline and are included in PDF exports
 
 **Save as PDF** — `Cmd+Shift+E` to export. Uses print-to-PDF under the hood — what you see is what you get
 
@@ -49,6 +53,8 @@ npm run dist
 | Shortcut | Action |
 |---|---|
 | `Cmd+O` | Open file |
+| `Cmd+E` | Toggle edit mode |
+| `Cmd+S` | Save |
 | `Cmd+Shift+R` | Toggle raw/rendered |
 | `Cmd+Shift+E` | Save as PDF |
 | `Cmd++` / `Cmd+-` | Zoom in/out |
@@ -59,7 +65,7 @@ npm run dist
 
 ## How it works
 
-Electron app with [marked](https://github.com/markedjs/marked) for markdown parsing and [highlight.js](https://highlightjs.org/) for syntax highlighting. PDF export uses Electron's built-in `printToPDF` — no headless browsers, no LaTeX, no nonsense.
+Electron app with [marked](https://github.com/markedjs/marked) for markdown parsing and [highlight.js](https://highlightjs.org/) for syntax highlighting. Local images are served via a custom protocol so relative paths like `![](./img.png)` just work. PDF export uses Electron's built-in `printToPDF` — no headless browsers, no LaTeX, no nonsense.
 
 ## Tech Stack
 
