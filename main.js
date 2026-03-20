@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, dialog, ipcMain, shell, nativeTheme, protocol } = require('electron');
+const { app, BrowserWindow, Menu, ShareMenu, dialog, ipcMain, shell, nativeTheme, protocol } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -313,6 +313,22 @@ ipcMain.handle('save-to-file', async (event, { content }) => {
     dialog.showErrorBox('Save Error', err.message);
     return { success: false, error: err.message };
   }
+});
+
+// Show in Finder
+ipcMain.on('show-in-finder', () => {
+  if (currentFilePath) {
+    shell.showItemInFolder(currentFilePath);
+  }
+});
+
+// Share file via macOS share sheet
+ipcMain.on('share-file', (event) => {
+  if (!currentFilePath) return;
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return;
+  const shareMenu = new ShareMenu({ filePaths: [currentFilePath] });
+  shareMenu.popup({ window: win });
 });
 
 // Open a recent file

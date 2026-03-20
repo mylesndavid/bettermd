@@ -50,6 +50,8 @@ const editBtn = document.getElementById('edit-btn');
 const editIcon = document.getElementById('edit-icon');
 const editLabel = document.getElementById('edit-label');
 const pdfBtn = document.getElementById('pdf-btn');
+const finderBtn = document.getElementById('finder-btn');
+const shareBtn = document.getElementById('share-btn');
 const titleText = document.getElementById('title-text');
 const recentsContainer = document.getElementById('recents');
 const recentsList = document.getElementById('recents-list');
@@ -254,6 +256,8 @@ window.bettermd.onRecentsUpdated((recents) => {
 backBtn.addEventListener('click', goBack);
 toggleBtn.addEventListener('click', toggleView);
 editBtn.addEventListener('click', toggleEdit);
+finderBtn.addEventListener('click', () => window.bettermd.showInFinder());
+shareBtn.addEventListener('click', () => window.bettermd.shareFile());
 
 pdfBtn.addEventListener('click', async () => {
   const prevMode = currentMode;
