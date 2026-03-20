@@ -23,18 +23,26 @@
         <span id="toggle-icon">◉</span>
         <span id="toggle-label">Rendered</span>
       </button>
-      <button id="pdf-btn" title="Save as PDF (⌘⇧E)">
-        <span>⬡</span>
-        <span>PDF</span>
-      </button>
-      <button id="finder-btn" title="Show in Finder">
-        <span>⌕</span>
-        <span>Finder</span>
-      </button>
-      <button id="share-btn" title="Share">
-        <span>↗</span>
-        <span>Share</span>
-      </button>
+      <div id="more-menu-wrapper">
+        <button id="more-btn" title="More actions">
+          <span>···</span>
+        </button>
+        <div id="more-menu" class="hidden">
+          <button id="pdf-btn">
+            <span>⬡</span>
+            <span>Save as PDF</span>
+            <span class="shortcut-hint">⌘⇧E</span>
+          </button>
+          <button id="finder-btn">
+            <span>⌕</span>
+            <span>Show in Finder</span>
+          </button>
+          <button id="share-btn">
+            <span>↗</span>
+            <span>Share…</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -52,6 +52,8 @@ const editLabel = document.getElementById('edit-label');
 const pdfBtn = document.getElementById('pdf-btn');
 const finderBtn = document.getElementById('finder-btn');
 const shareBtn = document.getElementById('share-btn');
+const moreBtn = document.getElementById('more-btn');
+const moreMenu = document.getElementById('more-menu');
 const titleText = document.getElementById('title-text');
 const recentsContainer = document.getElementById('recents');
 const recentsList = document.getElementById('recents-list');
@@ -256,10 +258,22 @@ window.bettermd.onRecentsUpdated((recents) => {
 backBtn.addEventListener('click', goBack);
 toggleBtn.addEventListener('click', toggleView);
 editBtn.addEventListener('click', toggleEdit);
-finderBtn.addEventListener('click', () => window.bettermd.showInFinder());
-shareBtn.addEventListener('click', () => window.bettermd.shareFile());
+finderBtn.addEventListener('click', () => { moreMenu.classList.add('hidden'); window.bettermd.showInFinder(); });
+shareBtn.addEventListener('click', () => { moreMenu.classList.add('hidden'); window.bettermd.shareFile(); });
+
+moreBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  moreMenu.classList.toggle('hidden');
+});
+
+document.addEventListener('click', (e) => {
+  if (!moreMenu.classList.contains('hidden') && !moreMenu.contains(e.target) && e.target !== moreBtn) {
+    moreMenu.classList.add('hidden');
+  }
+});
 
 pdfBtn.addEventListener('click', async () => {
+  moreMenu.classList.add('hidden');
   const prevMode = currentMode;
   if (currentMode !== 'rendered') {
     if (currentMode === 'edit') {
